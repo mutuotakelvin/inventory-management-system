@@ -1,8 +1,15 @@
+"use client"
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation';
 import React from 'react'
 import { MdOutlineInventory } from "react-icons/md";
+import classNames from 'classnames';
 
 const NavBar = () => {
+    const currentPath = usePathname()
+
+
     const links = [
         {href: '/', label: 'Dashboard'},
         {href: '/products', label: 'Products'}
@@ -16,7 +23,11 @@ const NavBar = () => {
                     <Link 
                     key={`${href}${label}`} 
                     href={href}
-                    className='text-zinc-500 hover:text-zinc-600 transition-colors'
+                    className={classNames({
+                        'text-zinc-900': href === currentPath,
+                        'text-zinc-500': href !== currentPath,
+                        'hover:text-zinc-800 transition-colors': true
+                    })}
                     >{ label}</Link>
                 ))
             }
