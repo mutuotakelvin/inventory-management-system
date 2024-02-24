@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
+import Spinner from '@/app/components/Spinner'
 
 
 type ProductForm = z.infer<typeof createProductSchema>
@@ -16,6 +17,7 @@ type ProductForm = z.infer<typeof createProductSchema>
 const NewIssuePage = () => {
     const router =  useRouter()
     const [error, setError] = useState('')
+    const [ isSubmitting, setIsSubmitting] = useState(false)
 
     const { register, handleSubmit, formState: {errors} } = useForm<ProductForm>({
         resolver: zodResolver(createProductSchema)
@@ -26,14 +28,17 @@ const NewIssuePage = () => {
         { error &&
             <Callout.Root color='red' className='mb-3'>
                 <Callout.Text>{error}</Callout.Text>
-            </Callout.Root>}
+            </Callout.Root>
+        }
         <form className='space-y-3 ' onSubmit={handleSubmit(async(data: ProductForm)=> {
-            data.price = parseFloat(data.price)
+            data.price = parseFloat(String(data.price)) as number;
 
             try {
-                const product = await axios.post('/api/products', data)
+                setIsSubmitting(true)
+                await axios.post('/api/products', data)
                 router.push('/products')
             } catch (error) {
+                setIsSubmitting(false)
                 setError('An unexpected error occurred.')
             }
         })}>
@@ -42,7 +47,8 @@ const NewIssuePage = () => {
             </TextField.Root>
             <ErrorMessage>{errors.name?.message}</ErrorMessage>
             <TextField.Root>
-                <TextField.Input  placeholder='Price' {...register('price')}/>
+                <TextField.Input type='number'
+    inputMode='decimal' placeholder='Price' {...register('price')}/>
             </TextField.Root>
             <ErrorMessage>{ errors.price?.message}</ErrorMessage>
             <TextField.Root>
@@ -51,7 +57,7 @@ const NewIssuePage = () => {
             <Text color='red' as='p'>{ errors.category?.message}</Text>
             <TextArea placeholder="Description" {...register('description')}/>
             <ErrorMessage>{ errors.description?.message}</ErrorMessage>
-            <Button>Submit New Product</Button>
+            <Button disabled={isSubmitting}>Submit New Product { isSubmitting && <Spinner />}</Button>
         </form>
 
     </div>
