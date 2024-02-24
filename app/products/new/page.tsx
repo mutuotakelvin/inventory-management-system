@@ -23,6 +23,19 @@ const NewIssuePage = () => {
         resolver: zodResolver(createProductSchema)
     })
 
+    const  onSubmit = handleSubmit(async(data: ProductForm)=> {
+        data.price = parseFloat(String(data.price)) as number;
+
+        try {
+            setIsSubmitting(true)
+            await axios.post('/api/products', data)
+            router.push('/products')
+        } catch (error) {
+            setIsSubmitting(false)
+            setError('An unexpected error occurred.')
+        }
+    })
+
   return (
     <div>
         { error &&
@@ -30,18 +43,7 @@ const NewIssuePage = () => {
                 <Callout.Text>{error}</Callout.Text>
             </Callout.Root>
         }
-        <form className='space-y-3 ' onSubmit={handleSubmit(async(data: ProductForm)=> {
-            data.price = parseFloat(String(data.price)) as number;
-
-            try {
-                setIsSubmitting(true)
-                await axios.post('/api/products', data)
-                router.push('/products')
-            } catch (error) {
-                setIsSubmitting(false)
-                setError('An unexpected error occurred.')
-            }
-        })}>
+        <form className='space-y-3 ' onSubmit={onSubmit}>
             <TextField.Root>
                 <TextField.Input  placeholder='Name' {...register('name')}/>
             </TextField.Root>
