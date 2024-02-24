@@ -3,6 +3,7 @@ import React from 'react'
 import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import prisma from "@/prisma/client";
+import ProductStatusBadge from '../components/ProductStatusBadge';
 
 const ProductsPage = async () => {
   const products = await prisma.product.findMany()
@@ -30,11 +31,11 @@ const ProductsPage = async () => {
                   <Table.Cell>
                     {product.name}
                     <div className='block md:hidden'>{ product.price}</div>
-                    <div className='block md:hidden'>{ product.outOfStock}</div>
+                    <div className='block md:hidden'><ProductStatusBadge status={product.outOfStock}/></div>
                     <div className='block md:hidden'>{ product.createdAt.toDateString()}</div>
                     </Table.Cell>
                   <Table.Cell className='hidden md:table-cell'>{ product.price}</Table.Cell>
-                  <Table.Cell className='hidden md:table-cell'>{ product.outOfStock}</Table.Cell>
+                  <Table.Cell className='hidden md:table-cell'><ProductStatusBadge status={product.outOfStock}/></Table.Cell>
                   <Table.Cell className='hidden md:table-cell'> { product.createdAt.toDateString()}</Table.Cell>
                 </Table.Row>
               ))
