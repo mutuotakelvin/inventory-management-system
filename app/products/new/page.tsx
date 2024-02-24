@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProductSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
+import ErrorMessage from '@/app/components/ErrorMessage'
 
 
 type ProductForm = z.infer<typeof createProductSchema>
@@ -26,7 +27,7 @@ const NewIssuePage = () => {
             <Callout.Root color='red' className='mb-3'>
                 <Callout.Text>{error}</Callout.Text>
             </Callout.Root>}
-        <form className='space-y-3 ' onSubmit={handleSubmit(async(data: ProductionForm)=> {
+        <form className='space-y-3 ' onSubmit={handleSubmit(async(data: ProductForm)=> {
             data.price = parseFloat(data.price)
 
             try {
@@ -39,17 +40,17 @@ const NewIssuePage = () => {
             <TextField.Root>
                 <TextField.Input  placeholder='Name' {...register('name')}/>
             </TextField.Root>
-            { errors.name && <Text color='red' as='p'>{errors.name.message}</Text>}
+            <ErrorMessage>{errors.name?.message}</ErrorMessage>
             <TextField.Root>
                 <TextField.Input  placeholder='Price' {...register('price')}/>
             </TextField.Root>
-            { errors.price && <Text color='red' as='p'>{ errors.price.message}</Text>}
+            <ErrorMessage>{ errors.price?.message}</ErrorMessage>
             <TextField.Root>
                 <TextField.Input  placeholder='Category' {...register('category')}/>
             </TextField.Root>
-            { errors.category && <Text color='red' as='p'>{ errors.category.message}</Text>}
+            <Text color='red' as='p'>{ errors.category?.message}</Text>
             <TextArea placeholder="Description" {...register('description')}/>
-            { errors.description && <Text color='red' as='p'>{ errors.description.message}</Text>}
+            <ErrorMessage>{ errors.description?.message}</ErrorMessage>
             <Button>Submit New Product</Button>
         </form>
 
