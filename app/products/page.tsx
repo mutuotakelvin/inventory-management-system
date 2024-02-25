@@ -4,17 +4,15 @@ import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import prisma from "@/prisma/client";
 import ProductStatusBadge from '../components/ProductStatusBadge';
+import delay from 'delay';
+import ProductActions from './ProductActions';
 
 const ProductsPage = async () => {
   const products = await prisma.product.findMany()
+  await delay(2000)
   return (
     <div>
-        <h1>Products page</h1>
-        <div className='mb-3 mt-3'>
-          <Button>
-              <Link href='/products/new'>New Product</Link>
-          </Button>
-        </div>
+        <ProductActions />
         <Table.Root variant='surface'>
           <Table.Header>
             <Table.Row>
@@ -29,7 +27,9 @@ const ProductsPage = async () => {
               products.map(product => (
                 <Table.Row key={ product.id }>
                   <Table.Cell>
-                    {product.name}
+                    <Link href={`/products/${product.id}`}>
+                      {product.name}
+                    </Link>
                     <div className='block md:hidden'>{ product.price}</div>
                     <div className='block md:hidden'><ProductStatusBadge status={product.outOfStock}/></div>
                     <div className='block md:hidden'>{ product.createdAt.toDateString()}</div>
