@@ -1,8 +1,5 @@
+import { Skeleton } from '@/app/components'
 import { Table } from '@radix-ui/themes'
-import React from 'react'
-import ProductStatusBadge from '../components/ProductStatusBadge'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 import ProductActions from './ProductActions'
 
 const LoadingProductPage = () => {

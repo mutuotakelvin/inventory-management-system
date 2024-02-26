@@ -1,15 +1,11 @@
 // "use client"
-import React from 'react'
-import {  Table } from '@radix-ui/themes'
 import prisma from "@/prisma/client";
-import ProductStatusBadge from '../components/ProductStatusBadge';
-import delay from 'delay';
+import { Table } from '@radix-ui/themes';
+import { Link, ProductStatusBadge } from '@/app/components';
 import ProductActions from './ProductActions';
-import Link from '../components/Link';
 
 const ProductsPage = async () => {
   const products = await prisma.product.findMany()
-  await delay(2000)
   return (
     <div>
         <ProductActions />

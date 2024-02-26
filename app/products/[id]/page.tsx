@@ -1,7 +1,8 @@
-import ProductStatusBadge from '@/app/components/ProductStatusBadge';
+import React from 'react'
 import prisma from "@/prisma/client";
-import { Card, Heading, Text } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
+import { Card, Heading, Text } from '@radix-ui/themes';
+import ProductStatusBadge from '@/app/components/ProductStatusBadge';
 
 interface Props {
     params: {id: string}
