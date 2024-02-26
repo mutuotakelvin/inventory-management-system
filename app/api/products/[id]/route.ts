@@ -34,3 +34,19 @@ export async function PATCH( request: NextRequest,{params}:{ params: { id: strin
 
     return NextResponse.json(updatedProduct)
 }
+
+export async function DELETE( request: NextRequest,{params}:{ params: { id: string}}){
+   const product = await prisma.product.findUnique({
+        where: {id: parseInt(params.id)}
+    })
+
+    if(!product){
+        return NextResponse.json({error: "Product not found"}, {status: 404})
+    }
+
+    await prisma.product.delete({
+        where: {id: parseInt(params.id)}
+    })
+
+    return NextResponse.json({message: "Product deleted"})
+}
