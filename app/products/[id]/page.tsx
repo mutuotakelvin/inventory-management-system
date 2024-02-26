@@ -1,8 +1,10 @@
 import React from 'react'
 import prisma from "@/prisma/client";
 import { notFound } from 'next/navigation';
-import { Card, Heading, Text } from '@radix-ui/themes';
+import { Button, Card, Heading, Text } from '@radix-ui/themes';
 import ProductStatusBadge from '@/app/components/ProductStatusBadge';
+import { Pencil1Icon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 
 interface Props {
     params: {id: string}
@@ -17,7 +19,13 @@ const ProductDetailPage = async ({params }: Props) => {
     if( !product) notFound()
   return (
     <div>
-        <Heading>{ product.name}</Heading>
+        <div className='flex justify-between items-center'>
+            <Heading>{ product.name}</Heading>
+            <Button>
+                <Pencil1Icon />
+                <Link href={`/products/${product.id}/edit`}>Edit Product</Link>
+            </Button>
+        </div>
         <div className='flex my-2'>
             <ProductStatusBadge status={product.outOfStock}/>
             <Text>{ product.createdAt.toDateString()}</Text>
