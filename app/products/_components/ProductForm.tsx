@@ -38,6 +38,7 @@ const ProducForm = ({product}: { product?: product}) => {
             else
                 await axios.post('/api/products', data)
             router.push('/products')
+            router.refresh()
         } catch (error) {
             setIsSubmitting(false)
             setError('An unexpected error occurred.')
