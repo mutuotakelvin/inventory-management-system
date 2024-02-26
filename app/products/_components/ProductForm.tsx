@@ -6,14 +6,14 @@ import { useForm } from 'react-hook-form'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createProductSchema } from '@/app/validationSchemas'
+import { productSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import { product } from '@prisma/client'
 
 
-type ProductFormData = z.infer<typeof createProductSchema>
+type ProductFormData = z.infer<typeof productSchema>
 
 interface Props {
     product?: product
@@ -25,7 +25,7 @@ const ProducForm = ({product}: { product?: product}) => {
     const [ isSubmitting, setIsSubmitting] = useState(false)
 
     const { register, handleSubmit, formState: {errors} } = useForm<ProductFormData>({
-        resolver: zodResolver(createProductSchema)
+        resolver: zodResolver(productSchema)
     })
 
     const  onSubmit = handleSubmit(async(data: ProductFormData)=> {
