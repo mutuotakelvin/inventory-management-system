@@ -3,12 +3,15 @@ import { notFound } from 'next/navigation';
 import EditProductButton from './EditProductButton';
 import ProductDetail from "./ProductDetail";
 import DeleteProductButton from "./DeleteProductButton";
+import authOptions from "@/app/auth/authOptions";
+import { getServerSession } from "next-auth";
 
 interface Props {
     params: {id: string}
 }
 
 const ProductDetailPage = async ({params }: Props) => {
+    const session = await getServerSession(authOptions)
 
     const product = await  prisma.product.findUnique({
         where: { id: parseInt( params.id)}
@@ -20,10 +23,13 @@ const ProductDetailPage = async ({params }: Props) => {
         <div className='w-[70%]'>
             <ProductDetail product={product}/>
         </div>
-        <div className="flex flex-col px-2 gap-4 items-center md:w-[30%] ">
-            <EditProductButton productId={product.id}/>
-            <DeleteProductButton productId={product.id}/>
-        </div>
+        {
+            session && 
+            <div className="flex flex-col px-2 gap-4 items-center md:w-[30%] ">
+                <EditProductButton productId={product.id}/>
+                <DeleteProductButton productId={product.id}/>
+            </div>
+        }
     </div>
   )
 }
