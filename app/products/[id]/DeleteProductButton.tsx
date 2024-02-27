@@ -3,17 +3,22 @@ import { AlertDialog, Button } from '@radix-ui/themes'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { set } from 'zod'
+import { Spinner } from '@/app/components'
 
 const DeleteProductButton = ({productId}: { productId: number}) => {
     const [error, setError] = useState(false)
     const router = useRouter()
+    const [ isDeleting, setIsDeleting] = useState(false)
 
     const deleteProduct = async () => {
         try {
+            setIsDeleting(true)
             await axios.delete('/api/products/' + productId)
             router.push('/products')
             router.refresh()
         } catch (error) {
+            setIsDeleting(false)
             setError(true)
         }
     }
@@ -21,7 +26,10 @@ const DeleteProductButton = ({productId}: { productId: number}) => {
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    <Button color='red'>Delete Product</Button>
+                    <Button color='red' disabled={isDeleting}>
+                        Delete Product
+                        { isDeleting && <Spinner />}
+                    </Button>
                 </AlertDialog.Trigger>
                 <AlertDialog.Content>
                     <AlertDialog.Title>Delete Product</AlertDialog.Title>
