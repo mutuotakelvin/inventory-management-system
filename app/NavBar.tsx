@@ -44,7 +44,7 @@ const NavBar = () => {
                         status === 'authenticated' && (
                             <DropdownMenu.Root>
                                 <DropdownMenu.Trigger>
-                                    <Avatar src={ session.user!.image!} className='cursor-pointer' fallback="?" size="2" radius='full'/>
+                                    <Avatar src={ session.user!.image!} className='cursor-pointer' fallback="?" size="2" radius='full' referrerPolicy='no-referrer'/>
                                 </DropdownMenu.Trigger>
                                 <DropdownMenu.Content>
                                     <DropdownMenu.Label>
@@ -66,7 +66,7 @@ const NavBar = () => {
             </div>
         </Container>
     </nav>
-  )
+)
 }
 
 export default NavBar
