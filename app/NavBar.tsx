@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation';
 import React from 'react'
 import { MdOutlineInventory } from "react-icons/md";
 import classNames from 'classnames';
+import { useSession } from 'next-auth/react'
 
 const NavBar = () => {
     const currentPath = usePathname()
-
+    const { status, data: session } = useSession()
 
     const links = [
         {href: '/', label: 'Dashboard'},
@@ -20,18 +21,27 @@ const NavBar = () => {
         <ul className='flex space-x-6'>
             {
                 links.map(({href, label}) => (
-                    <Link 
-                    key={`${href}${label}`} 
-                    href={href}
-                    className={classNames({
-                        'text-zinc-900': href === currentPath,
-                        'text-zinc-500': href !== currentPath,
-                        'hover:text-zinc-800 transition-colors': true
-                    })}
-                    >{ label}</Link>
+                    <li key={`${href}${label}`} >
+                        <Link 
+                        href={href}
+                        className={classNames({
+                            'text-zinc-900': href === currentPath,
+                            'text-zinc-500': href !== currentPath,
+                            'hover:text-zinc-800 transition-colors': true
+                        })}
+                        >{ label}</Link>
+                    </li>
                 ))
             }
         </ul>
+        <div>
+            {
+                status === 'authenticated' && (<Link href="/api/auth/signout">Sign Out</Link>)
+            }
+            {
+                status === 'unauthenticated' && (<Link href="/api/auth/signin">Sign In</Link>)
+            }
+        </div>
     </nav>
   )
 }
