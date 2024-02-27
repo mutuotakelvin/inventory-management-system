@@ -37,7 +37,7 @@ const ProducForm = ({product}: { product?: product}) => {
                 await axios.patch('/api/products/' + product.id, data)
             else
                 await axios.post('/api/products', data)
-            router.push('/products')
+            router.push('/products/list')
             router.refresh()
         } catch (error) {
             setIsSubmitting(false)
@@ -66,7 +66,7 @@ const ProducForm = ({product}: { product?: product}) => {
                 <TextField.Input defaultValue={product?.category} placeholder='Category' {...register('category')}/>
             </TextField.Root>
             <Text color='red' as='p'>{ errors.category?.message}</Text>
-            <TextArea defaultValue={product?.description} placeholder="Description" {...register('description')}/>
+            <TextArea defaultValue={product?.description || ""} placeholder="Description" {...register('description')}/>
             <ErrorMessage>{ errors.description?.message}</ErrorMessage>
             <Button disabled={isSubmitting}>
                 {

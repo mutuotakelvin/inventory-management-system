@@ -6,7 +6,7 @@ const EditProductButton = ({productId}: {productId: number}) => {
   return (
     <Button>
         <Pencil1Icon />
-        <Link href={`/products/${productId}/edit`}>Edit Product</Link>
+        <Link href={`/products/edit/${productId}`}>Edit Product</Link>
     </Button>
   )
 }

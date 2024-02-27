@@ -15,7 +15,7 @@ const DeleteProductButton = ({productId}: { productId: number}) => {
         try {
             setIsDeleting(true)
             await axios.delete('/api/products/' + productId)
-            router.push('/products')
+            router.push('/products/list')
             router.refresh()
         } catch (error) {
             setIsDeleting(false)

@@ -7,7 +7,7 @@ const ProductFormSkeleton = () => {
         <Skeleton height="2rem"/>
         <Skeleton height="2rem"/>
         <Skeleton height="2rem"/>
-        <Skeleton height="20rem"/>
+        <Skeleton height="5rem"/>
     </Box>
   )
 }
