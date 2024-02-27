@@ -6,7 +6,7 @@ import React from 'react'
 import { MdOutlineInventory } from "react-icons/md";
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react'
-import { Container } from '@radix-ui/themes';
+import { Avatar, Container, DropdownMenu, Text } from '@radix-ui/themes';
 
 const NavBar = () => {
     const currentPath = usePathname()
@@ -41,7 +41,23 @@ const NavBar = () => {
                 </div>
                 <div>
                     {
-                        status === 'authenticated' && (<Link href="/api/auth/signout">Sign Out</Link>)
+                        status === 'authenticated' && (
+                            <DropdownMenu.Root>
+                                <DropdownMenu.Trigger>
+                                    <Avatar src={ session.user!.image!} className='cursor-pointer' fallback="?" size="2" radius='full'/>
+                                </DropdownMenu.Trigger>
+                                <DropdownMenu.Content>
+                                    <DropdownMenu.Label>
+                                        <Text size="2">
+                                            {session.user!.email}
+                                        </Text>
+                                    </DropdownMenu.Label>
+                                    <DropdownMenu.Item>
+                                        <Link href="/api/auth/signout">Sign Out</Link>
+                                    </DropdownMenu.Item>
+                                </DropdownMenu.Content>
+                            </DropdownMenu.Root>
+                        )
                     }
                     {
                         status === 'unauthenticated' && (<Link href="/api/auth/signin">Sign In</Link>)
