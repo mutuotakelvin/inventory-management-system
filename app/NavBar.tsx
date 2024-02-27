@@ -7,6 +7,7 @@ import { MdOutlineInventory } from "react-icons/md";
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react'
 import { Avatar, Container, DropdownMenu, Text } from '@radix-ui/themes';
+import {Skeleton} from '@/app/components'
 
 const NavBar = () => {
     const currentPath = usePathname()
@@ -61,6 +62,9 @@ const NavBar = () => {
                     }
                     {
                         status === 'unauthenticated' && (<Link href="/api/auth/signin">Sign In</Link>)
+                    }
+                    {
+                        status === 'loading' && (<Skeleton width='3rem' />)
                     }
                 </div>
             </div>
