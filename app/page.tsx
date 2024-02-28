@@ -1,4 +1,5 @@
 import LatestProducts from "./LatestProducts";
+import ProductChart from "./ProductChart";
 import ProductSummary from "./ProductSummary";
 import prisma from "@/prisma/client";
 
@@ -9,6 +10,7 @@ export default async function Home() {
 
   return (
     <div>
+      <ProductChart inStock={inStock} outOfStock={outOfStock} />
         <LatestProducts />
         <ProductSummary inStock={inStock} outOfStock={outOfStock} />
     </div>
