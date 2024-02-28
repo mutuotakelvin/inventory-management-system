@@ -78,7 +78,7 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
             }
           </Table.Body>
         </Table.Root>
-        <div>
+        <div className="mt-3 flex justify-end w-full">
           <Pagination
             pageSize={pageSize}
             currentPage={page}
