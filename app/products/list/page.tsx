@@ -3,9 +3,17 @@ import prisma from "@/prisma/client";
 import { Table } from '@radix-ui/themes';
 import { Link, ProductStatusBadge } from '@/app/components';
 import ProductActions from './ProductActions';
+import { Status } from "@prisma/client";
 
-const ProductsPage = async () => {
-  const products = await prisma.product.findMany()
+const ProductsPage = async ({ searchParams }: { searchParams: { status: Status}}) => {
+  const statuses = Object.values(Status)
+  const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
+  const products = await prisma.product.findMany({
+    where: {
+      outOfStock: status
+    }
+  })
+  console.log(searchParams.status)
   return (
     <div>
         <ProductActions />
