@@ -6,8 +6,9 @@ import ProductActions from './ProductActions';
 import { Status, product } from "@prisma/client";
 import NextLink from "next/link";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
+import Pagination from "@/app/components/Pagination";
 
-const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, orderBy: keyof product, orderDirection?: 'asc' | 'desc'}}) => {
+const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, orderBy: keyof product, orderDirection?: 'asc' | 'desc', page: string}}) => {
   const columns: { 
     label: string
     value: keyof product
@@ -20,16 +21,23 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
   ]
   const statuses = Object.values(Status)
   const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
-  const orderBy = columns.map(col => col.value).includes(searchParams.orderBy)
-      ? { [searchParams.orderBy] : searchParams.orderDirection === 'desc' ? 'desc' : 'asc'} : undefined
-  const products = await prisma.product.findMany({
-    where: {
-      outOfStock: status
-    },
-    orderBy
-  })
 
-  console.log(searchParams.orderDirection)
+  const where = {outOfStock: status}
+  const orderBy = columns.map(col => col.value).includes(searchParams.orderBy)
+    ? { [searchParams.orderBy] : searchParams.orderDirection === 'desc' ? 'desc' : 'asc'} : undefined
+  
+  const page = parseInt(searchParams.page) || 1
+  const pageSize = 10
+  
+  const products = await prisma.product.findMany({
+    where,
+    orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize
+  }) 
+
+  const productCount = await prisma.product.count({ where })
+  // console.log(searchParams.orderDirection)
   
   return (
     <div>
@@ -70,6 +78,13 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
             }
           </Table.Body>
         </Table.Root>
+        <div>
+          <Pagination
+            pageSize={pageSize}
+            currentPage={page}
+            itemCount={productCount}
+          />
+        </div>
     </div>
   )
 }
