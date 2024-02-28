@@ -34,4 +34,12 @@ const ProductDetailPage = async ({params }: Props) => {
   )
 }
 
+export async function generateMetadata({params}: Props) {
+    const product =  await prisma.product.findUnique({ where: { id: parseInt(params.id) }})
+    return {
+        title: product?.name,
+        description: 'Details of product'+ product?.id
+    }
+}
+
 export default ProductDetailPage

@@ -3,6 +3,7 @@ import LatestProducts from "./LatestProducts";
 import ProductChart from "./ProductChart";
 import ProductSummary from "./ProductSummary";
 import prisma from "@/prisma/client";
+import { Metadata } from "next";
 
 
 export default async function Home() {
@@ -19,4 +20,9 @@ export default async function Home() {
     </Grid>
   )
 
+}
+
+export const metadata: Metadata = {
+  title: 'Inventory Management System - Dashboard',
+  description: 'View prodcut summary and latest products.'
 }

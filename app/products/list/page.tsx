@@ -7,6 +7,7 @@ import { Status, product } from "@prisma/client";
 import NextLink from "next/link";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import Pagination from "@/app/components/Pagination";
+import { Metadata } from "next";
 
 const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, orderBy: keyof product, orderDirection?: 'asc' | 'desc', page: string}}) => {
   const columns: { 
@@ -92,3 +93,8 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
 export const dynamic = 'force-dynamic'
 
 export default ProductsPage
+
+export const metadata: Metadata = {
+  title: 'Inventory Management System - Products List',
+  description: 'View all products.'
+}
