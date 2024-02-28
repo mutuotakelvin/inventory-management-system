@@ -5,7 +5,7 @@ import { Link, ProductStatusBadge } from '@/app/components';
 import ProductActions from './ProductActions';
 import { Status, product } from "@prisma/client";
 import NextLink from "next/link";
-import { ArrowUpIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 
 const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, orderBy: keyof product, orderDirection?: 'asc' | 'desc'}}) => {
   const columns: { 
@@ -20,17 +20,16 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
   ]
   const statuses = Object.values(Status)
   const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
-  const orderBy = searchParams.orderBy as string
-  const orderDirection = searchParams.orderDirection === 'desc' ? 'desc' : 'asc'
+  const orderBy = columns.map(col => col.value).includes(searchParams.orderBy)
+      ? { [searchParams.orderBy] : searchParams.orderDirection === 'desc' ? 'desc' : 'asc'} : undefined
   const products = await prisma.product.findMany({
     where: {
       outOfStock: status
     },
-    orderBy: {
-      [orderBy] : orderDirection
-
-    }
+    orderBy
   })
+
+  console.log(searchParams.orderDirection)
   
   return (
     <div>
@@ -42,11 +41,11 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
                 columns.map(column => (
                   <Table.ColumnHeaderCell key={column.value} className={column.className}>
                     <NextLink href={{
-                      query: { ...searchParams, orderBy: column.value}
+                      query: { ...searchParams, orderBy: column.value, orderDirection: column.value === searchParams.orderBy && searchParams.orderDirection === 'asc' ? 'desc' : 'asc'}
                     }}>
                       {column.label}
                     </NextLink>
-                    { column.value === searchParams.orderBy && <ArrowUpIcon />}
+                    { column.value === searchParams.orderBy && <ArrowDownIcon /> }
                   </Table.ColumnHeaderCell>
               ))}
             </Table.Row>
