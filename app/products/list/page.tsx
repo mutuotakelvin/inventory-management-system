@@ -7,7 +7,7 @@ import { Status, product } from "@prisma/client";
 import NextLink from "next/link";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 
-const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, orderBy: keyof product}}) => {
+const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, orderBy: keyof product, orderDirection?: 'asc' | 'desc'}}) => {
   const columns: { 
     label: string
     value: keyof product
@@ -20,9 +20,15 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
   ]
   const statuses = Object.values(Status)
   const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
+  const orderBy = searchParams.orderBy as string
+  const orderDirection = searchParams.orderDirection === 'desc' ? 'desc' : 'asc'
   const products = await prisma.product.findMany({
     where: {
       outOfStock: status
+    },
+    orderBy: {
+      [orderBy] : orderDirection
+
     }
   })
   
@@ -34,7 +40,7 @@ const ProductsPage = async ({ searchParams }: { searchParams: { status: Status, 
             <Table.Row >
               {
                 columns.map(column => (
-                  <Table.ColumnHeaderCell key={column.label} className={column.className}>
+                  <Table.ColumnHeaderCell key={column.value} className={column.className}>
                     <NextLink href={{
                       query: { ...searchParams, orderBy: column.value}
                     }}>
